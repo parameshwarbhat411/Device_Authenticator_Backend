@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional
 
 verification_token: Dict[str, Dict] = {}
 
@@ -16,3 +16,11 @@ def get_token(token: str) -> Dict:
 def delete_token(token: str) -> None:
     if token in verification_token:
         del verification_token[token]
+
+
+def find_token_by_email_and_device(email: str, device_id: str) -> Optional[str]:
+    """Finds a token for a given email and device ID."""
+    for token, data in verification_token.items():
+        if data["email"] == email and data["device_id"] == device_id:
+            return token
+    return None
