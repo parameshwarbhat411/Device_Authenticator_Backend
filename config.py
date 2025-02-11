@@ -2,4 +2,4 @@ from datetime import timedelta
 
 
 class Config:
-    TOKEN_EXPIRATION_MINUTES = timedelta(minutes=10)
+    TOKEN_EXPIRATION_MINUTES = 10
