@@ -1,21 +1,35 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from starlette import status
+
 from models import VerifyRequest
 from services.auth_service import AuthService
-from slowapi import Limiter
-from slowapi.util import get_remote_address
-
-# limiter = Limiter(key_func=get_remote_address)
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["Authorization", "Content-Type"],
+)
+
 
 @app.post("/api/auth/verify")
-async def verify_email_and_device(request: VerifyRequest):
+async def verify_email_and_generateToken(request: VerifyRequest):
     """Endpoint to verify email and device, and generate a token."""
-    token = AuthService.verify_email_and_device(request.email, request.device_id)
-    return {"token": token}
+    token, expires_at = AuthService.verify_email_and_generateToken(request.email, request.device_id)
+    return {"token": token, "expires_at": expires_at}
 
-# @app.post("/api/auth/submit")
-# async def submit_token(request: SubmitRequest):
-#     """Endpoint to submit and validate the verification token."""
-#     return AuthService.submit_verification_token(request.token)
+
+@app.get("/api/protected")
+def get_protected(token: str, device_id: str):
+    """
+    Example protected route that requires a valid, unexpired token
+    *and* the matching device_id.
+    """
+    if not AuthService.validate_device_token(token, device_id):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token or device")
+
+    return {"message": "You have accessed a protected resource!"}
