@@ -1,7 +1,6 @@
 annotated-types==0.7.0
 anyio==4.8.0
 click==8.1.8
-coverage==7.6.12
 exceptiongroup==1.2.2
 fastapi==0.115.8
 h11==0.14.0
