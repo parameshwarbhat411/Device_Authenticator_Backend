@@ -1,7 +1,6 @@
 from services.token_factory import TokenFactory
 
 
-
 class AuthService:
     """Service class to handle authentication logic."""
 
