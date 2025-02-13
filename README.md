@@ -172,7 +172,7 @@ python -m unittest discover test
 This will discover and run all test cases in the `test` directory.
 
 Attaching the test coverage report for the repository
-![Test Coverage Report](images/Screenshot 2025-02-12 at 11.07.02 PM.png)
+![Test Coverage Report](images/coverage_report.png)
 
 ---
 
